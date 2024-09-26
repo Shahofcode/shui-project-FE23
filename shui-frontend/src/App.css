@@ -1,0 +1,21 @@
+.App {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+input, textarea, button {
+  margin: 10px 0;
+  padding: 10px;
+}
+
+button {
+  cursor: pointer;
+}

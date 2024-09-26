@@ -1,0 +1,797 @@
+{
+  "C:\\Users\\shahi\\shui-project\\shui-backend": {
+    "versionSfCore": null,
+    "versionFramework": "4.4.2",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "default-aws-credential-resolver": "<REDACTED>"
+    },
+    "composeServiceName": null,
+    "servicePath": "C:\\Users\\shahi\\shui-project\\shui-backend",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "shui-backend",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "eu-north-1",
+        "environment": {
+          "TABLE_NAME": "ShuiMessages"
+        },
+        "stage": "dev",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "GetMessagesLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/shui-backend-dev-getMessages"
+              }
+            },
+            "PostMessageLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/shui-backend-dev-postMessage"
+              }
+            },
+            "EditMessageLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/shui-backend-dev-editMessage"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "shui-backend",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shui-backend-dev*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shui-backend-dev*:*:*"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "shui-backend",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "GetMessagesLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-eu-north-1-8dd40656-48fb",
+                  "S3Key": "serverless/shui-backend/dev/1727363027401-2024-09-26T15:03:47.401Z/shui-backend.zip"
+                },
+                "Handler": "getmessage.getMessages",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "shui-backend-dev-getMessages",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "TABLE_NAME": "ShuiMessages"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "GetMessagesLogGroup"
+              ]
+            },
+            "PostMessageLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-eu-north-1-8dd40656-48fb",
+                  "S3Key": "serverless/shui-backend/dev/1727363027401-2024-09-26T15:03:47.401Z/shui-backend.zip"
+                },
+                "Handler": "postmessage.postMessage",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "shui-backend-dev-postMessage",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "TABLE_NAME": "ShuiMessages"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "PostMessageLogGroup"
+              ]
+            },
+            "EditMessageLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-eu-north-1-8dd40656-48fb",
+                  "S3Key": "serverless/shui-backend/dev/1727363027401-2024-09-26T15:03:47.401Z/shui-backend.zip"
+                },
+                "Handler": "editmessage.editMessage",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "shui-backend-dev-editMessage",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "TABLE_NAME": "ShuiMessages"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "EditMessageLogGroup"
+              ]
+            },
+            "GetMessagesLambdaVersionSdaVrquoIkqHimLDoRfnEiudaCZw8aZwcuKVmB4PYS4": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "GetMessagesLambdaFunction"
+                },
+                "CodeSha256": "qE+YWPbOLll9b/zEEGat07mF6m/EOHeM+CbOI3nHzFo="
+              }
+            },
+            "PostMessageLambdaVersionqF7AZ97QQaqQtLkyGonR1P697eRTdiqA40NAMmv4": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "PostMessageLambdaFunction"
+                },
+                "CodeSha256": "qE+YWPbOLll9b/zEEGat07mF6m/EOHeM+CbOI3nHzFo="
+              }
+            },
+            "EditMessageLambdaVersionit5kCWlOFgO9ClNDmmPytcilRmn0bapg88n0nCiWrkc": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "EditMessageLambdaFunction"
+                },
+                "CodeSha256": "qE+YWPbOLll9b/zEEGat07mF6m/EOHeM+CbOI3nHzFo="
+              }
+            },
+            "ApiGatewayRestApi": {
+              "Type": "AWS::ApiGateway::RestApi",
+              "Properties": {
+                "Name": "dev-shui-backend",
+                "EndpointConfiguration": {
+                  "Types": [
+                    "EDGE"
+                  ]
+                },
+                "Policy": ""
+              }
+            },
+            "ApiGatewayResourceGetmessage": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "getmessage",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayResourcePostmessage": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "postmessage",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayResourceEditmessage": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "editmessage",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodGetmessageGet": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "GET",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceGetmessage"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "GetMessagesLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "GetMessagesLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodPostmessagePost": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "POST",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourcePostmessage"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "PostMessageLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "PostMessageLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodEditmessagePut": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "PUT",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceEditmessage"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "EditMessageLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "EditMessageLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayDeployment1727363023071": {
+              "Type": "AWS::ApiGateway::Deployment",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "StageName": "dev"
+              },
+              "DependsOn": [
+                "ApiGatewayMethodGetmessageGet",
+                "ApiGatewayMethodPostmessagePost",
+                "ApiGatewayMethodEditmessagePut"
+              ]
+            },
+            "GetMessagesLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "GetMessagesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "PostMessageLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "PostMessageLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "EditMessageLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "EditMessageLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "MessagesTable": {
+              "Type": "AWS::DynamoDB::Table",
+              "Properties": {
+                "TableName": "ShuiMessages",
+                "AttributeDefinitions": [
+                  {
+                    "AttributeName": "id",
+                    "AttributeType": "S"
+                  }
+                ],
+                "KeySchema": [
+                  {
+                    "AttributeName": "id",
+                    "KeyType": "HASH"
+                  }
+                ],
+                "BillingMode": "PAY_PER_REQUEST"
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-eu-north-1-8dd40656-48fb",
+              "Export": {
+                "Name": "sls-shui-backend-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "GetMessagesLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "GetMessagesLambdaVersionSdaVrquoIkqHimLDoRfnEiudaCZw8aZwcuKVmB4PYS4"
+              },
+              "Export": {
+                "Name": "sls-shui-backend-dev-GetMessagesLambdaFunctionQualifiedArn"
+              }
+            },
+            "PostMessageLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "PostMessageLambdaVersionqF7AZ97QQaqQtLkyGonR1P697eRTdiqA40NAMmv4"
+              },
+              "Export": {
+                "Name": "sls-shui-backend-dev-PostMessageLambdaFunctionQualifiedArn"
+              }
+            },
+            "EditMessageLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "EditMessageLambdaVersionit5kCWlOFgO9ClNDmmPytcilRmn0bapg88n0nCiWrkc"
+              },
+              "Export": {
+                "Name": "sls-shui-backend-dev-EditMessageLambdaFunctionQualifiedArn"
+              }
+            },
+            "ServiceEndpoint": {
+              "Description": "URL of the service endpoint",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    },
+                    "/dev"
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-shui-backend-dev-ServiceEndpoint"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "getMessages": {
+          "handler": "getmessage.getMessages",
+          "events": [
+            {
+              "http": {
+                "path": "getmessage",
+                "method": "get",
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "name": "shui-backend-dev-getMessages",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "GetMessagesLambdaVersionSdaVrquoIkqHimLDoRfnEiudaCZw8aZwcuKVmB4PYS4"
+        },
+        "postMessage": {
+          "handler": "postmessage.postMessage",
+          "events": [
+            {
+              "http": {
+                "path": "postmessage",
+                "method": "post",
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "name": "shui-backend-dev-postMessage",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "PostMessageLambdaVersionqF7AZ97QQaqQtLkyGonR1P697eRTdiqA40NAMmv4"
+        },
+        "editMessage": {
+          "handler": "editmessage.editMessage",
+          "events": [
+            {
+              "http": {
+                "path": "editmessage",
+                "method": "put",
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "name": "shui-backend-dev-editMessage",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "EditMessageLambdaVersionit5kCWlOFgO9ClNDmmPytcilRmn0bapg88n0nCiWrkc"
+        }
+      },
+      "resources": {
+        "Resources": {
+          "MessagesTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "ShuiMessages",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
+          }
+        },
+        "Outputs": {}
+      }
+    },
+    "serviceRawFile": "service: shui-backend\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  region: eu-north-1\r\n  environment:\r\n    TABLE_NAME: ShuiMessages  \r\n\r\nfunctions:\r\n  getMessages:\r\n    handler: getmessage.getMessages\r\n    events:\r\n      - http:\r\n          path: getmessage\r\n          method: get\r\n\r\n  postMessage:\r\n    handler: postmessage.postMessage\r\n    events:\r\n      - http:\r\n          path: postmessage\r\n          method: post\r\n\r\n  editMessage:\r\n    handler: editmessage.editMessage\r\n    events:\r\n      - http:\r\n          path: editmessage\r\n          method: put\r\n\r\nresources:\r\n  Resources:\r\n    MessagesTable:\r\n      Type: AWS::DynamoDB::Table\r\n      Properties:\r\n        TableName: ShuiMessages  \r\n        AttributeDefinitions:\r\n          - AttributeName: id\r\n            AttributeType: S\r\n        KeySchema:\r\n          - AttributeName: id\r\n            KeyType: HASH\r\n        BillingMode: PAY_PER_REQUEST\r\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "error": null,
+    "params": {},
+    "machineId": "f611f9eb85a0a35688a200c03d39a47d",
+    "stage": "dev",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "62e35e95-9b27-4c5b-8620-a407d9e609b1",
+    "orgName": "shahofcode",
+    "userId": "FD5vmhbZXgKncvZwzZ",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "shahofcode",
+    "subscription": null,
+    "userEmail": "shahinnaderi21@gmail.com",
+    "serviceProviderAwsRegion": "eu-north-1",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "273354663882",
+    "projectType": "traditional",
+    "versionSf": "4.4.2",
+    "serviceProviderAwsCfStackName": "shui-backend-dev",
+    "integrations": {},
+    "serviceUniqueId": "arn:aws:cloudformation:eu-north-1:273354663882:stack/shui-backend-dev/3806a4f0-7b7e-11ef-b6ff-0a42539f130d",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:eu-north-1:273354663882:stack/shui-backend-dev/3806a4f0-7b7e-11ef-b6ff-0a42539f130d",
+    "serviceProviderAwsCfStackCreated": "2024-09-25T20:39:11.256Z",
+    "serviceProviderAwsCfStackUpdated": "2024-09-26T14:25:53.831Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "EditMessageLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:eu-north-1:273354663882:function:shui-backend-dev-editMessage:4",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-shui-backend-dev-EditMessageLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "PostMessageLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:eu-north-1:273354663882:function:shui-backend-dev-postMessage:4",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-shui-backend-dev-PostMessageLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "GetMessagesLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:eu-north-1:273354663882:function:shui-backend-dev-getMessages:4",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-shui-backend-dev-GetMessagesLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://a2afkmmp5j.execute-api.eu-north-1.amazonaws.com/dev",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-shui-backend-dev-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-eu-north-1-8dd40656-48fb",
+        "ExportName": "sls-shui-backend-dev-ServerlessDeploymentBucketName"
+      }
+    ]
+  }
+}

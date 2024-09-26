@@ -1,0 +1,16 @@
+{
+  "name": "shui-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Shahin",
+  "license": "ISC",
+  "description": "Serverless Backend for Shui-project",
+  "dependencies": {
+    "aws-sdk": "^2.1691.0",
+    "uuid": "^10.0.0"
+  }
+}

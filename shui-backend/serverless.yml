@@ -1,0 +1,44 @@
+service: shui-backend
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-north-1
+  environment:
+    TABLE_NAME: ShuiMessages  
+
+functions:
+  getMessages:
+    handler: getmessage.getMessages
+    events:
+      - http:
+          path: getmessage
+          method: get
+
+  postMessage:
+    handler: postmessage.postMessage
+    events:
+      - http:
+          path: postmessage
+          method: post
+
+  editMessage:
+    handler: editmessage.editMessage
+    events:
+      - http:
+          path: editmessage
+          method: put
+
+resources:
+  Resources:
+    MessagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ShuiMessages  
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
